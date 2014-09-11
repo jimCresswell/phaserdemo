@@ -21,6 +21,7 @@
     var platforms;
     var movingPlatform;
     var stars;
+    var starCount = 12;
     var cursors;
     var scoreText;
     var score = 0;
@@ -72,8 +73,8 @@
         stars = game.add.group();
         stars.enableBody = true;
 
-        // Here we'll create 12 of them evenly spaced apart.
-        for (var i = 0, star; i < 12; i++) {
+        // Here we'll create `starCount` of them evenly spaced apart.
+        for (var i = 0, star; i < starCount; i++) {
 
             //  Create a star inside of the 'stars' group
             star = stars.create(i * 70, 0, 'star');
@@ -151,12 +152,22 @@
         } else if (movingPlatform.body.blocked.right || movingPlatform.body.touching.right) {
             movingPlatform.body.velocity.x = -200;
         }
+
+        // Check for game end condition.
+        if (starCount <= 0) {
+            var endText = game.add.text(320, 350, 'YOU WIN!', {
+                fill: 'red'
+            });
+            endText.fontSize = 50;
+            endText.angle = -25;
+        }
     }
 
     // Star-player collision callback.
     function collectStar (player, star) {
         // Removes the star from the screen.
         star.kill();
+        starCount--;
 
         //  Add and update the score
         score += 10;
