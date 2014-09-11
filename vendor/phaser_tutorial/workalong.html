@@ -1,15 +1,15 @@
 <!doctype html> 
 <html lang="en"> 
 <head> 
-	<meta charset="UTF-8" />
-	<title>Phaser - Making your first game, part 1</title>
-	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>Phaser - Making your first game, part 1</title>
+    <script type="text/javascript" src="js/phaser.min.js"></script>
     <style type="text/css">
         body {
             margin: 0;
         }
         canvas {
-        	margin: 1.5em auto;
+            margin: 1.5em auto;
         }
     </style>
 </head>
@@ -17,28 +17,28 @@
 
 <script type="text/javascript">
 
-var game, platforms;
+    var game, platforms;
 
-function preload() {
-	game.load.image('sky', 'assets/sky.png');
-	game.load.image('ground', 'assets/platform.png');
-	game.load.image('star', 'assets/star.png');
-	game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-}
+    function preload() {
+        game.load.image('sky', 'assets/sky.png');
+        game.load.image('ground', 'assets/platform.png');
+        game.load.image('star', 'assets/star.png');
+        game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    }
 
-function create() {
+    function create() {
 
-	game.physics.startSystem(Phaser.Physics.ARCADE);
+        game.physics.startSystem(Phaser.Physics.ARCADE);
 
-	game.add.sprite(0, 0, 'sky');
+        game.add.sprite(0, 0, 'sky');
 
-	platforms = game.add.group();
-}
+        platforms = game.add.group();
+    }
 
-function update() {
-}
+    function update() {
+    }
 
-game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+    game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 </script>
 
