@@ -73,6 +73,9 @@
     }
 
     function update() {
+
+        // Collide the player with the platforms.
+        game.physics.arcade.collide(player, platforms);
     }
 
     game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
