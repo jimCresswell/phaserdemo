@@ -124,8 +124,12 @@
         // Check for player-star collisions
         game.physics.arcade.overlap(player, stars, collectStar, null, this);
 
-        // Reset the players velocity (movement).
-        player.body.velocity.x = 0;
+        // Apply horizontal drag to the player if it is standing on something.
+        if (player.body.touching.down) {
+            player.body.drag.x = 300;
+        } else {
+            player.body.drag.x = 0;
+        }
 
         // Left and right movement physics and animation calls.
         if (cursors.left.isDown) {
