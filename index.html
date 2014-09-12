@@ -96,6 +96,7 @@
 
         // Player physics properties. Give the little guy a slight bounce.
         player.body.maxVelocity.x = 300;
+        player.body.bounce.x = 0.2;
         player.body.bounce.y = 0.2;
         player.body.gravity.y = 300;
         player.body.collideWorldBounds = true;
@@ -135,13 +136,13 @@
         if (cursors.left.isDown) {
             //  Apply force to the left if on ground.
             if (player.body.touching.down) {
-                player.body.acceleration.x = -150;
+                player.body.acceleration.x = -200;
             }
             player.animations.play('left');
         } else if (cursors.right.isDown) {
             //  Apply force to the right if on ground.
             if (player.body.touching.down) {
-                player.body.acceleration.x = 150;
+                player.body.acceleration.x = 200;
             }
             player.animations.play('right');
         } else {
