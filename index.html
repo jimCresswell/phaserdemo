@@ -17,7 +17,6 @@
 
 <script type="text/javascript">
 
-    var game;
     var platforms;
     var movingPlatform;
     var stars;
@@ -26,14 +25,14 @@
     var scoreText;
     var score = 0;
 
-    function preload() {
+    function preload(game) {
         game.load.image('sky', 'vendor/phaser_tutorial/assets/sky.png');
         game.load.image('ground', 'vendor/phaser_tutorial/assets/platform.png');
         game.load.image('star', 'vendor/phaser_tutorial/assets/star.png');
         game.load.spritesheet('dude', 'vendor/phaser_tutorial/assets/dude.png', 32, 48);
     }
 
-    function create() {
+    function create(game) {
 
         //  We're going to be using physics, so enable the Arcade Physics system.
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -113,7 +112,7 @@
     }
 
     // Called on every frame.
-    function update() {
+    function update(game) {
 
         // Collide the player and stars with the platforms.
         game.physics.arcade.collide(player, platforms);
@@ -175,7 +174,7 @@
     }
 
     // Instantiate the game.
-    game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+    new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 </script>
 
