@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Phaser - Making your first game, part 1</title>
+    <title>My Phaser Demo</title>
     <script type="text/javascript" src="vendor/phaser/phaser.min.js"></script>
     <style type="text/css">
         body {
@@ -157,12 +157,12 @@
             player.frame = 4;
         }
 
-        // Apply drag on the ground.
+        // Apply drag.
         // Will only apply if an acceleration is not being applied.
         if (player.body.touching.down) {
             player.body.drag.x = 100;
         } else {
-            player.body.drag.x = 0;
+            player.body.drag.x = 50;
         }
 
         //  Allow the player to jump if they are touching the ground.
