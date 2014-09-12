@@ -17,31 +17,34 @@
 
 <script type="text/javascript">
 
-    var platforms;
-    var movingPlatform;
-    var stars;
-    var starCount = 12;
-    var cursors;
-    var scoreText;
-    var score = 0;
+    function preload() {
+        var game = this.game;
 
-    function preload(game) {
         game.load.image('sky', 'vendor/phaser_tutorial/assets/sky.png');
         game.load.image('ground', 'vendor/phaser_tutorial/assets/platform.png');
         game.load.image('star', 'vendor/phaser_tutorial/assets/star.png');
         game.load.spritesheet('dude', 'vendor/phaser_tutorial/assets/dude.png', 32, 48);
     }
 
-    function create(game) {
+    function create() {
+        var game = this.game;
+        var player;
+        var stars;
+        var platforms;
+        var movingPlatform;
+        var scoreText;
 
         //  We're going to be using physics, so enable the Arcade Physics system.
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        //  A simple background for our game.
+        // Add sprites, groups and UI text.
+        // Sprites and groups are added in visual order back of scene to front of scene.
+        // A simple background for our game.
         game.add.sprite(0, 0, 'sky');
-
-        //  The platforms group contains the ground and the 2 ledges we can jump on.
-        platforms = game.add.group();
+        platforms = game.jc.actors.platforms = game.add.group();
+        stars = game.jc.actors.stars = game.add.group();
+        player = game.jc.actors.player = game.add.sprite(32, game.world.height - 150, 'dude');
+        scoreText = game.jc.data.scoreText = game.add.text(16, 16, 'score: 0', {fill: '#000' });
 
         //  We will enable physics for any object that is created in this group.
         platforms.enableBody = true;
@@ -61,19 +64,18 @@
         ledge = platforms.create(-175, 250, 'ground');
         ledge.body.immovable = true;
 
-        // Moving ledge
-        movingPlatform = platforms.create(500, 325, 'ground');
+        // Moving ledge, special instance of the platform group.
+        movingPlatform = game.jc.actors.movingPlatform = platforms.create(500, 325, 'ground');
         movingPlatform.scale.setTo(0.25,1);
         movingPlatform.body.immovable = true;
         movingPlatform.body.collideWorldBounds = true;
         movingPlatform.body.velocity.x = -200;
 
         // Stars
-        stars = game.add.group();
         stars.enableBody = true;
 
         // Here we'll create `starCount` of them evenly spaced apart.
-        for (var i = 0, star; i < starCount; i++) {
+        for (var i = 0, star, starCount = game.jc.data.initialStarCount; i < starCount; i++) {
 
             //  Create a star inside of the 'stars' group
             star = stars.create(i * 70, 0, 'star');
@@ -89,9 +91,6 @@
             star.body.collideWorldBounds = true;
         }
 
-        // The player.
-        player = game.add.sprite(32, game.world.height - 150, 'dude');
-
         //  We need to enable physics on the player.
         game.physics.arcade.enable(player);
 
@@ -105,14 +104,18 @@
         player.animations.add('right', [5, 6, 7, 8], 10, true);
 
         // Keyboard control.
-        cursors = game.input.keyboard.createCursorKeys();
-
-        // Score UI.
-        scoreText = game.add.text(16, 16, 'score: 0', {fill: '#000' });
+        game.jc.controls.cursors = game.input.keyboard.createCursorKeys();
     }
 
     // Called on every frame.
-    function update(game) {
+    function update() {
+        var game = this.game;
+        var player = game.jc.actors.player;
+        var stars = game.jc.actors.stars;
+        var platforms = game.jc.actors.platforms;
+        var movingPlatform = game.jc.actors.movingPlatform;
+        var scoreText = game.jc.data.scoreText;
+        var cursors = game.jc.controls.cursors;
 
         // Collide the player and stars with the platforms.
         game.physics.arcade.collide(player, platforms);
@@ -153,7 +156,7 @@
         }
 
         // Check for game end condition.
-        if (starCount <= 0) {
+        if (game.jc.actors.stars.countLiving() <= 0) {
             var endText = game.add.text(320, 350, 'YOU WIN!', {
                 fill: 'red'
             });
@@ -164,17 +167,34 @@
 
     // Star-player collision callback.
     function collectStar (player, star) {
+
         // Removes the star from the screen.
         star.kill();
-        starCount--;
 
         //  Add and update the score
-        score += 10;
-        scoreText.text = 'Score: ' + score;
+        this.game.jc.data.score += 10;
+        this.game.jc.data.scoreText.text = 'Score: ' + this.game.jc.data.score;
     }
 
     // Instantiate the game.
-    new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+    var __game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+    // Custom object references and game state.
+    __game.jc = {};
+    __game.jc.actors = {
+        player: null,
+        platforms: null,
+        movingPlatform: null,
+        stars: null
+    };
+    __game.jc.data = {
+        initialStarCount: 1,
+        scoreText: null,
+        score: 0
+    }
+    __game.jc.controls = {
+        cursors: null
+    }
 
 </script>
 
