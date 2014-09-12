@@ -133,12 +133,17 @@
 
         // Left and right movement physics and animation calls.
         if (cursors.left.isDown) {
-            //  Move to the left
-            player.body.velocity.x = -150;
+            //  Move to the left with fake acceleration.
+            // Can't use accelration.x because that causes drag.x to be ignored.
+            if (player.body.touching.down) {
+                player.body.velocity.x = player.body.velocity.x - 15;
+            }
             player.animations.play('left');
         } else if (cursors.right.isDown) {
             //  Move to the right
-            player.body.velocity.x = 150;
+            if (player.body.touching.down) {
+                player.body.velocity.x = player.body.velocity.x + 15;
+            }
             player.animations.play('right');
         } else {
             //  Stand still
@@ -148,7 +153,7 @@
 
         //  Allow the player to jump if they are touching the ground.
         if (cursors.up.isDown && player.body.touching.down) {
-            player.body.velocity.y = -300;
+            player.body.velocity.y = -350;
         }
 
         // Allow the moving platform to change direction.
