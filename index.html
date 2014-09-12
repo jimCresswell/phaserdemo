@@ -95,6 +95,7 @@
         game.physics.arcade.enable(player);
 
         // Player physics properties. Give the little guy a slight bounce.
+        player.body.maxVelocity.x = 300;
         player.body.bounce.y = 0.2;
         player.body.gravity.y = 300;
         player.body.collideWorldBounds = true;
@@ -116,6 +117,8 @@
         var movingPlatform = game.jc.actors.movingPlatform;
         var scoreText = game.jc.data.scoreText;
         var cursors = game.jc.controls.cursors;
+        var drag;
+        var deltaSpeedX;
 
         // Collide the player and stars with the platforms.
         game.physics.arcade.collide(player, platforms);
@@ -124,31 +127,35 @@
         // Check for player-star collisions
         game.physics.arcade.overlap(player, stars, collectStar, null, this);
 
-        // Apply horizontal drag to the player if it is standing on something.
-        if (player.body.touching.down) {
-            player.body.drag.x = 300;
-        } else {
-            player.body.drag.x = 0;
-        }
-
         // Left and right movement physics and animation calls.
+
+        // Recalculate acceleration.
+        // Reset to 0 so that acceleration only applies when key is pressed.
+        player.body.acceleration.x = 0;
         if (cursors.left.isDown) {
-            //  Move to the left with fake acceleration.
-            // Can't use accelration.x because that causes drag.x to be ignored.
+            //  Apply force to the left if on ground.
             if (player.body.touching.down) {
-                player.body.velocity.x = player.body.velocity.x - 15;
+                player.body.acceleration.x = -150;
             }
             player.animations.play('left');
         } else if (cursors.right.isDown) {
-            //  Move to the right
+            //  Apply force to the right if on ground.
             if (player.body.touching.down) {
-                player.body.velocity.x = player.body.velocity.x + 15;
+                player.body.acceleration.x = 150;
             }
             player.animations.play('right');
         } else {
-            //  Stand still
+            //  Stop animation.
             player.animations.stop();
             player.frame = 4;
+        }
+
+        // Apply drag on the ground.
+        // Will only apply if an acceleration is not being applied.
+        if (player.body.touching.down) {
+            player.body.drag.x = 100;
+        } else {
+            player.body.drag.x = 0;
         }
 
         //  Allow the player to jump if they are touching the ground.
