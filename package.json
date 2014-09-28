@@ -4,7 +4,7 @@
   "private": true,
   "description": "Learning Phaser",
   "scripts": {
-    "start" : "http-server -a 127.0.0.1 -p 1337 -d",
+    "start": "http-server -a 127.0.0.1 -p 1337 -d",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,5 +24,8 @@
   "homepage": "https://github.com/jimCresswell/phaserdemo",
   "dependencies": {
     "http-server": "^0.7.0"
+  },
+  "devDependencies": {
+    "gulp": "~3.8.8"
   }
 }
